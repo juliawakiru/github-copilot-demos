@@ -4,6 +4,7 @@ import eventsRouter from './routes/events';
 import registrationsRouter from './routes/registrations';
 import adminRouter from './routes/admin';
 import configRouter from './routes/config';
+import { adminAuth } from './middleware/adminAuth';
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -15,7 +16,7 @@ app.use(express.json());
 // Routes
 app.use('/api/events', eventsRouter);
 app.use('/api/register', registrationsRouter);
-app.use('/api/admin', adminRouter);
+app.use('/api/admin', adminAuth, adminRouter);
 app.use('/api/config', configRouter);
 
 // Health check

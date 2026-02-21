@@ -1,9 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Container, Nav, Navbar } from 'react-bootstrap';
 import { useConfig } from '../context/ConfigContext';
+import { useAuth } from '../context/AuthContext';
 
 export default function SiteNavbar() {
   const { config } = useConfig();
+  const { isAdminAuthenticated } = useAuth();
   const location = useLocation();
 
   return (
@@ -25,13 +27,15 @@ export default function SiteNavbar() {
             >
               Events
             </Nav.Link>
-            <Nav.Link
-              as={Link}
-              to="/admin"
-              active={location.pathname.startsWith('/admin')}
-            >
-              Admin
-            </Nav.Link>
+            {isAdminAuthenticated && (
+              <Nav.Link
+                as={Link}
+                to="/admin"
+                active={location.pathname.startsWith('/admin')}
+              >
+                Admin
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -5,11 +5,13 @@ import Footer from './components/Footer';
 import Home from './pages/Home';
 import EventDetail from './pages/EventDetail';
 import Register from './pages/Register';
+import AdminLogin from './pages/AdminLogin';
 import AdminLayout from './pages/Admin/AdminLayout';
 import AdminEvents from './pages/Admin/AdminEvents';
 import AdminEventForm from './pages/Admin/AdminEventForm';
 import AdminRegistrations from './pages/Admin/AdminRegistrations';
 import AdminSettings from './pages/Admin/AdminSettings';
+import { useAuth } from './context/AuthContext';
 
 function PublicLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -19,6 +21,11 @@ function PublicLayout({ children }: { children: React.ReactNode }) {
       <Footer />
     </>
   );
+}
+
+function RequireAdminAuth({ children }: { children: React.ReactNode }) {
+  const { isAdminAuthenticated } = useAuth();
+  return isAdminAuthenticated ? <>{children}</> : <Navigate to="/admin/login" replace />;
 }
 
 export default function App() {
@@ -51,8 +58,18 @@ export default function App() {
           }
         />
 
-        {/* Admin routes */}
-        <Route path="/admin" element={<AdminLayout />}>
+        {/* Admin login */}
+        <Route
+          path="/admin/login"
+          element={
+            <PublicLayout>
+              <AdminLogin />
+            </PublicLayout>
+          }
+        />
+
+        {/* Admin routes (require authentication) */}
+        <Route path="/admin" element={<RequireAdminAuth><AdminLayout /></RequireAdminAuth>}>
           <Route index element={<Navigate to="/admin/events" replace />} />
           <Route path="events" element={<AdminEvents />} />
           <Route path="events/new" element={<AdminEventForm />} />
