@@ -21,7 +21,6 @@ export default function Home() {
   const [searchParams] = useSearchParams();
   const [events, setEvents] = useState<EventData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
   const [category, setCategory] = useState<EventCategory | ''>(
     (searchParams.get('category') as EventCategory) || ''
   );
@@ -32,7 +31,6 @@ export default function Home() {
     try {
       const data = await getEvents({
         category: category || undefined,
-        search: search || undefined,
         upcoming: showUpcoming || undefined,
       });
       setEvents(data);
@@ -45,11 +43,6 @@ export default function Home() {
     fetchEvents();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, showUpcoming]);
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetchEvents();
-  };
 
   const upcomingCount = events.filter((e) => e.status === 'upcoming').length;
 
@@ -91,14 +84,13 @@ export default function Home() {
         {/* Filters */}
         <Row className="g-3 mb-4 align-items-end">
           <Col md={5}>
-            <Form onSubmit={handleSearch}>
+            <Form onSubmit={(e) => e.preventDefault()}>
               <InputGroup>
                 <Form.Control
                   placeholder="Search events..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
+                  disabled
                 />
-                <Button type="submit" variant="primary">
+                <Button type="submit" variant="primary" disabled>
                   <Search />
                 </Button>
               </InputGroup>
@@ -146,7 +138,6 @@ export default function Home() {
             <Button
               variant="outline-primary"
               onClick={() => {
-                setSearch('');
                 setCategory('');
                 setShowUpcoming(false);
               }}

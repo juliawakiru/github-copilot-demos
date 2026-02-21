@@ -4,11 +4,14 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import './index.css'
 import App from './App.tsx'
 import { ConfigProvider } from './context/ConfigContext.tsx'
+import { ThemeProvider } from './context/ThemeContext.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <ConfigProvider>
-      <App />
-    </ConfigProvider>
+    <ThemeProvider>
+      <ConfigProvider>
+        <App />
+      </ConfigProvider>
+    </ThemeProvider>
   </StrictMode>,
 )

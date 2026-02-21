@@ -43,7 +43,7 @@ export default function AdminLayout() {
       </div>
 
       {/* Main */}
-      <div className="flex-grow-1 bg-light">
+      <div className="flex-grow-1 admin-main-content">
         <Outlet />
       </div>
     </div>
