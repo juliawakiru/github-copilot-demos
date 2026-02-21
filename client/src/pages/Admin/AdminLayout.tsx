@@ -1,13 +1,21 @@
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { Nav } from 'react-bootstrap';
 import {
-  CalendarEvent, People, Gear, ArrowLeft,
+  CalendarEvent, People, Gear, ArrowLeft, BoxArrowRight,
 } from 'react-bootstrap-icons';
 import { useConfig } from '../../context/ConfigContext';
+import { useAuth } from '../../context/AuthContext';
 
 export default function AdminLayout() {
   const { config } = useConfig();
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const location = useLocation();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
 
   const navItems = [
     { to: '/admin/events', label: 'Events', icon: <CalendarEvent className="me-2" /> },
@@ -39,6 +47,13 @@ export default function AdminLayout() {
             <ArrowLeft className="me-2" />
             Public Site
           </Link>
+          <button
+            onClick={handleLogout}
+            className="nav-link px-3 py-2 text-white opacity-75 btn btn-link w-100 text-start"
+          >
+            <BoxArrowRight className="me-2" />
+            Logout
+          </button>
         </div>
       </div>
 
